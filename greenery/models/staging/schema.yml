@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_greenery__addresses
+    description: "View containing the unique address for each user in our users view "
+    
+  - name: stg_greenery__events
+    description: "View describing the different events that took place in a particular session"
+
+  - name: stg_greenery__order_items
+    description: "View that allows us to identify the distinct items a user selected in his order as well as the quantity"
+
+  - name: stg_greenery__orders
+    description: "View containing the details of every order created by a user"
+
+  - name: stg_greenery__products
+    description: "View that allows us to identify and describe the products selected in our order_items view"
+
+  - name: stg_greenery__promos
+    description: "View containing the different types of promos available in an order"
+
+  - name: stg_greenery__superheroes
+    description: "Descriptive data regarding different superheroes"
+
+  - name: stg_greenery__users
+    description: "View containing personal informations for our unique users"
