@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: fact_promo_performance
+    description: Aggregate data containing total amount and average ticket per promo
+    columns:
+      - name: date
+        tests:
+          - not_null
+          

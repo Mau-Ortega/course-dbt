@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: int_session_events_basic_agg
+    description: Events count per session per user
+    columns:
+      - name: session_id
+        tests:
+          - not_null
+          - unique 

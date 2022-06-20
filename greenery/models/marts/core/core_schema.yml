@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: User table containing a users descriptive attributes
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - unique 
+  
+  - name: fact_orders
+    description: Order table containing related to an order 
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique 

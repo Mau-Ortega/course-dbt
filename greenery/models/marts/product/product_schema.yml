@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: fact_events
+    description: Event performance base on date/country/state
+    columns:
+      - name: date
+        tests:
+          - not_null
+      
+  

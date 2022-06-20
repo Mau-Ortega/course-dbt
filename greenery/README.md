@@ -140,3 +140,29 @@ from num_sessions
 ;
 ```
 Answer: 11.79
+
+# WEEK 2 PROJECT
+
+### What is our user repeat rate??
+```sql
+with num_orders as
+(
+select
+
+user_id,
+count(distinct order_id) as num_orders
+
+from dbt.dbt_mauricio_o.int_users_orders
+where status is not null
+group by 1
+)
+select
+
+count(distinct case when num_orders >= 2 then user_id end)::float/count(distinct user_id)::float as repeat_rate
+
+from num_orders
+```
+Answer: .80 or 80%
+
+### What are good indicators of a user who will likely purchase again? What about indicators of users who are likely NOT to purchase again? If you had more data, what features would you want to look into to answer this question?
+We can check a users acumulated purchases in time and compare it vs the average active users acumulated purchases to see when we can expect a user to recur again.
