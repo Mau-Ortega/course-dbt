@@ -1,0 +1,7 @@
+version: 2
+
+macros:
+  - name: get_distinct_events
+    description: Get unique events from events model 
+  
+    

@@ -166,3 +166,91 @@ Answer: .80 or 80%
 
 ### What are good indicators of a user who will likely purchase again? What about indicators of users who are likely NOT to purchase again? If you had more data, what features would you want to look into to answer this question?
 We can check a users acumulated purchases in time and compare it vs the average active users acumulated purchases to see when we can expect a user to recur again.
+
+
+# WEEK 3 PROJECT
+
+### What is our user repeat rate??
+```sql
+select
+
+count(distinct case when n_checkout = 1 then session_id end)::float/count(distinct session_id)::float
+
+from dbt.dbt_mauricio_o.int_session_events_basic_agg;
+```
+Answer: .62
+
+### What is our conversion rate by product??
+For this question, a facts_product_converion table was used that simplified the number of times a product was viewed or added to cart. With this logic already create, all that was really needed was to group the information by product and sum the number of views and checkouts to calculate the conversion rate:
+```sql
+select
+
+product_id,
+name,
+sum(nb_added_to_cart)/sum(nb_times_viewed) as conversion_rate
+
+from dbt.dbt_mauricio_o.facts_product_conversion
+group by 1,2
+order by 3 desc
+```
+Answer:
+String of pearls
+0.40366972477064220183
+Arrow Head
+0.37864077669902912621
+Bamboo
+0.37837837837837837838
+Calathea Makoyana
+0.37647058823529411765
+Cactus
+0.36781609195402298851
+Rubber Plant
+0.36363636363636363636
+Aloe Vera
+0.35643564356435643564
+Majesty Palm
+0.35514018691588785047
+Bird of Paradise
+0.35483870967741935484
+Dragon Tree
+0.35416666666666666667
+Boston Fern
+0.35051546391752577320
+ZZ Plant
+0.35000000000000000000
+Pilea Peperomioides
+0.34782608695652173913
+Devil's Ivy
+0.34782608695652173913
+Monstera
+0.34666666666666666667
+Peace Lily
+0.34313725490196078431
+Jade Plant
+0.34285714285714285714
+Angel Wings Begonia
+0.34042553191489361702
+Ficus
+0.33980582524271844660
+Fiddle Leaf Fig
+0.33707865168539325843
+Spider Plant
+0.33707865168539325843
+Philodendron
+0.33684210526315789474
+Birds Nest Fern
+0.33333333333333333333
+Alocasia Polly
+0.33333333333333333333
+Pink Anthurium
+0.33333333333333333333
+Orchid
+0.33035714285714285714
+Snake Plant
+0.31775700934579439252
+Money Tree
+0.31707317073170731707
+Ponytail Palm
+0.29702970297029702970
+Pothos
+0.27272727272727272727
