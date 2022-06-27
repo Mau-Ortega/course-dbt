@@ -7,29 +7,29 @@
 with first_order as
 (
     select 
-        user_id,
+        user_id as user_id_,
+        country,
+        state,
+        zipcode,
+        address,
         min(order_creation_date) as first_order_date,
         max(order_creation_date) as last_order_date
 
     from {{ ref('int_users_orders')}}
-    group by 1
+    group by 1,2,3,4,5
 )
 select
 
-    us.user_id,
-    first_name,
-    last_name,
-    email,
-    phone_number,
-    address,
-    zipcode,
-    state,
+    {{ dbt_utils.star(from=ref('stg_greenery__users'), except=["address_id", "updated_at","created_at"]) }},
     country,
-    account_creation_date,
+    state,
+    zipcode,
+    address,
+    created_at as account_creation_date,
     first_order_date,
     last_order_date
 
-from {{ ref('int_users_orders')}} us
-left join first_order fo on us.user_id = fo.user_id
+from {{ ref('stg_greenery__users')}} us
+left join first_order fo on us.user_id = fo.user_id_
 
    
