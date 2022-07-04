@@ -254,3 +254,88 @@ Ponytail Palm
 0.29702970297029702970
 Pothos
 0.27272727272727272727
+
+# WEEK 4 PROJECT
+
+## Part 1:
+## dbt Snapshots:
+```sql
+{% snapshot orders_snapshot %}
+
+  {{
+    config(
+      target_schema='snapshots',
+      strategy='check',
+      unique_key='order_id',
+      check_cols=['status'],
+    )
+  }}
+
+  SELECT * FROM {{ source('src_greenery','orders') }}
+
+{% endsnapshot %}
+```
+
+
+## Part 2:
+## How are our users moving through the product funnel? Which steps in the funnel have largest drop off points?
+
+```sql
+select
+
+count( distinct case when n_page_view > 0 then session_id end) as page_view,
+count( distinct case when n_page_view > 0 then session_id end)::float/count( distinct case when n_page_view > 0 then session_id end)::float  as page_view_conversion,
+
+count( distinct case when n_add_to_cart > 0 then session_id end) as add_to_cart,
+count( distinct case when n_add_to_cart > 0 then session_id end)::float/count( distinct case when n_page_view > 0 then session_id end)::float  as add_to_cart_conversion,
+
+count( distinct case when n_checkout > 0 then session_id end) as check_out,
+count( distinct case when n_checkout > 0 then session_id end)::float /count( distinct case when n_page_view > 0 then session_id end)::float  as checkout_conversion
+
+from dbt_mauricio_o.int_session_events_basic_agg;
+```
+Answer:
+|            | Page_view   | Add_to_cart   |  Check_out | 
+| :---       |    :----:   |    :----:     |    ----:   |
+| Count      | 578         | 467           | 361        |
+| Conversion | 100%        | 80.8%         | 62.5%      | 
+
+
+
+### Exposure: 
+```sql
+version: 2
+
+exposures:  
+  - name: Funnel Dashboard
+    description: >
+      Models that are critical to our product funnel dashboard
+    type: dashboard
+    maturity: high
+    url: tableau/greenery/.io
+    owner:
+      name: Mauricio Ortega
+      email: mauortega2@greenery.com
+    depends_on:
+      - ref('int_session_events_basic_agg')
+```
+
+## Part 3: Reflection questions: 
+## 3A. dbt next steps for you:
+### if your organization is thinking about using dbt, how would you pitch the value of dbt/analytics engineering to a decision maker at your organization?
+My organization is starting to integrate DBT but we're still in the early stages. However, I believe that there will be great opportunity for optimization
+with the use of staging models and subsequent intermediate and facts models. Very often in our company, we are asked to create very similar tables which causes an overload of data and redundancy. A functional data modelling structure will help filter this unwanted data. Snapshots will also be a game changer since we have a few datasets that we need to track more in depth and are unable to due to its update timestamp logic.
+
+### if your organization is using dbt, what are 1-2 things you might do differently / recommend to your organization based on learning from this course?
+Put snapshots into use for more precise payment tracking and status updates.
+Implement 'for loops' to avoid impractical use of 'case when' functions.
+
+### if you are thinking about moving to analytics engineering, what skills have you picked that give you the most confidence in pursuing this next step?
+A better understanding of best practices for data modeling.
+
+## 3B. Setting up for production / scheduled dbt run of your project
+My company currently works with Airflow. We would probably continue using it for orchestration but freshness tests and unique tests for specific models will definitely be a gamechanger to assure optimal data quality. 
+
+
+
+
